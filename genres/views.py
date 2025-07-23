@@ -30,5 +30,23 @@ class GenreDetailView(View):
             return JsonResponse(data)
         except Genre.DoesNotExist:
             return JsonResponse({'error' : 'id not found'}, status=404)
+    def put(self, request, pk):
+        try:
+            genre = get_object_or_404(Genre, pk=pk)
+            data = json.loads(request.body.decode('utf-8'))
+            genre.name = data['name']
+            genre.save()
+            return JsonResponse({'id' : genre.id, 'name': genre.name}, status=200)
+        except Genre.DoesNotExist:
+            return JsonResponse({'error' : 'id not found'}, status=404)
+    def delete(self, request, pk):
+        try:
+            genre = get_object_or_404(Genre, pk=pk)
+            genre.delete()
+            return JsonResponse({'message' : 'Gênero excluído com sucesso'}, status=404)
+        except Genre.DoesNotExist:
+            return JsonResponse({'error' : 'id not found'}, status=404)
+
+
 
 
