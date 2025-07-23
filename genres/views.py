@@ -6,7 +6,7 @@ from django.utils.decorators import method_decorator
 import json
 
 @method_decorator(csrf_exempt, name='dispatch')
-class GenreView(View):
+class GenreListView(View):
     def get(self, request, *args, **kwargs):
         genres = Genre.objects.all()
         data = [{'id' : genre.id, 'name' : genre.name} for genre in genres]
@@ -19,3 +19,15 @@ class GenreView(View):
             return JsonResponse({'id' : new_genre.id, 'name': new_genre.name}, status=201)
         else:
             return JsonResponse({'error' : 'bad request'}, status=400)
+
+@method_decorator(csrf_exempt, name='dispatch')
+class GenreDetailView(View):
+    def get(self, request, pk):
+        genre = Genre.objects.get(pk=pk)
+        if genre:
+            data = {'id' : genre.id, 'name' : genre.name}
+            return JsonResponse(data)
+        else:
+            return JsonResponse({'error' : 'id not found'}, status=404)
+
+
