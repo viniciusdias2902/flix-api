@@ -4,15 +4,19 @@ from django.utils.decorators import method_decorator
 from django.shortcuts import get_object_or_404
 from rest_framework import generics
 from genres.serializers import GenreSerializer
+from rest_framework.permissions import IsAuthenticated
+
 
 class GenreCreateListView(generics.ListCreateAPIView):
+    permission_classes = (IsAuthenticated,)
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
+
 
 class GenreRetrieveUpdateDestroyView(generics.RetrieveDestroyAPIView):
+    permission_classes = (IsAuthenticated,)
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
-
 
 
 # @method_decorator(csrf_exempt, name='dispatch')
@@ -55,5 +59,3 @@ class GenreRetrieveUpdateDestroyView(generics.RetrieveDestroyAPIView):
 #             return JsonResponse({'message' : 'Gênero excluído com sucesso'}, status=404)
 #         except Genre.DoesNotExist:
 #             return JsonResponse({'error' : 'id not found'}, status=404)
-
-
